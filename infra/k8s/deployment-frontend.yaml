@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketmind-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: marketmind-frontend
+  template:
+    metadata:
+      labels:
+        app: marketmind-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: marketmind-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketmind-frontend
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: marketmind-frontend
+  type: LoadBalancer

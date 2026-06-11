@@ -145,3 +145,9 @@ out/
 *.njsproj
 *.sln
 *.sw?
+
+# Local database files
+*.db
+*.db-journal
+*.db-shm
+*.db-wal

@@ -34,9 +34,9 @@ async def lifespan(app: FastAPI):
         # Import models so they are registered on Base.metadata
         from backend.app.models.user import User, OTPVerification
         from backend.app.models.portfolio import Portfolio
-        from backend.app.models.watchlist import Watchlist
-        from backend.app.models.payment import Subscription
-        from backend.app.models.logs import AuditLog
+        from backend.app.models.watchlist import Watchlist, Alert
+        from backend.app.models.payment import PaymentSubscription
+        from backend.app.models.logs import AuditLog, AIUsageLog
         
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)

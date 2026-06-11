@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import StockChart from "@/components/StockChart";
+import TradingViewChart from "@/components/TradingViewChart";
 import { 
   RefreshCw, Search, ArrowUpRight, ArrowDownRight, Compass, 
   ShieldAlert, BarChart3, HelpCircle, Sparkles, Brain, Check, Copy, X 
@@ -170,6 +171,7 @@ export default function StockAnalysisPage({ params }: { params: Promise<{ symbol
   const [searchVal, setSearchVal] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [chartType, setChartType] = useState<"system" | "tradingview">("system");
 
   // AI Report States
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -371,18 +373,44 @@ export default function StockAnalysisPage({ params }: { params: Promise<{ symbol
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs text-slate-400 px-1">
               <span>INTERACTIVE PRICE & VOLUME CHART</span>
-              <span className="flex items-center space-x-1.5">
-                <span className="h-2 w-2 rounded-full bg-indigo-500" /> <span>SMA 20</span>
-                <span className="h-2 w-2 rounded-full bg-yellow-500" /> <span>SMA 50</span>
-                <span className="h-2 w-2 rounded-full bg-pink-500" /> <span>SMA 200</span>
-              </span>
+              <div className="flex items-center space-x-4">
+                {chartType === "system" && (
+                  <span className="flex items-center space-x-1.5 mr-2">
+                    <span className="h-2 w-2 rounded-full bg-indigo-500" /> <span>SMA 20</span>
+                    <span className="h-2 w-2 rounded-full bg-yellow-500" /> <span>SMA 50</span>
+                    <span className="h-2 w-2 rounded-full bg-pink-500" /> <span>SMA 200</span>
+                  </span>
+                )}
+                <div className="flex bg-slate-900/60 p-0.5 rounded-lg border border-[rgba(255,255,255,0.06)]">
+                  <button
+                    onClick={() => setChartType("system")}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                      chartType === "system" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    System Data
+                  </button>
+                  <button
+                    onClick={() => setChartType("tradingview")}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                      chartType === "tradingview" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    TradingView Live
+                  </button>
+                </div>
+              </div>
             </div>
-            <StockChart
-              data={chartData}
-              sma20={getSMAOverlay(20)}
-              sma50={getSMAOverlay(50)}
-              sma200={getSMAOverlay(200)}
-            />
+            {chartType === "system" ? (
+              <StockChart
+                data={chartData}
+                sma20={getSMAOverlay(20)}
+                sma50={getSMAOverlay(50)}
+                sma200={getSMAOverlay(200)}
+              />
+            ) : (
+              <TradingViewChart symbol={currentSymbol} />
+            )}
           </div>
 
           {/* Support and Resistance card */}
@@ -677,12 +705,11 @@ export default function StockAnalysisPage({ params }: { params: Promise<{ symbol
               )}
             </div>
 
-            {/* Modal Footer */}
             <div className="px-6 py-4 border-t border-[rgba(255,255,255,0.06)] bg-slate-950/60">
               <div className="flex flex-col space-y-2">
                 <span className="text-[9px] text-amber-500 font-bold uppercase tracking-wider block leading-none">Regulatory Notice</span>
                 <p className="text-[10px] text-slate-500 leading-relaxed">
-                  MarketMind AI is an automated multi-agent simulation platform. All reports, scores, and ratings are for educational purposes only. They do not constitute financial advice, buy/sell recommendations, or guaranteed predictions. Invest at your own risk.
+                  MarketMind AI provides analytical insights and does not guarantee future market performance or investment outcomes. All reports, scores, and ratings are for educational purposes only and do not constitute financial advice. Invest at your own risk.
                 </p>
               </div>
             </div>

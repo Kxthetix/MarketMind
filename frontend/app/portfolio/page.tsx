@@ -428,6 +428,16 @@ export default function PortfolioPage() {
           </div>
         </div>
       )}
+
+      {/* Regulatory Notice Footer */}
+      <div className="glass p-6 rounded-2xl relative z-10 bg-slate-950/40 border-[rgba(255,255,255,0.06)]">
+        <div className="flex flex-col space-y-2">
+          <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider block leading-none">Regulatory Notice</span>
+          <p className="text-[11px] text-slate-500 leading-relaxed">
+            MarketMind AI provides analytical insights and does not guarantee future market performance or investment outcomes. All reports, scores, ratings, and rankings are for educational and analytical purposes only. Invest at your own risk.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

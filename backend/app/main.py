@@ -26,6 +26,24 @@ async def lifespan(app: FastAPI):
     # Startup tasks
     logger.info("Initializing application resources...")
     await redis_client.initialize()
+    
+    # Automatically create database tables
+    try:
+        logger.info("Creating database tables if they do not exist...")
+        from backend.app.core.database import Base, engine
+        # Import models so they are registered on Base.metadata
+        from backend.app.models.user import User, OTPVerification
+        from backend.app.models.portfolio import Portfolio
+        from backend.app.models.watchlist import Watchlist
+        from backend.app.models.payment import Subscription
+        from backend.app.models.logs import AuditLog
+        
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables initialized successfully.")
+    except Exception as e:
+        logger.error(f"Failed to initialize database tables: {e}", exc_info=True)
+        
     yield
     # Shutdown tasks
     logger.info("Closing application resources...")

@@ -15,8 +15,9 @@ class Settings(BaseModel):
     
     # DB URLs
     DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", 
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/marketmind"
+        "DATABASE_URL",
+        "sqlite+aiosqlite:///./marketmind.db" if os.getenv("MOCK_MODE", "True").lower() == "true"
+        else "postgresql+asyncpg://postgres:postgres@localhost:5432/marketmind"
     )
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     

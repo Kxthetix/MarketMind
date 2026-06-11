@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, Boolean, DateTime, ForeignKey, Float
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, Boolean, DateTime, ForeignKey, Float, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.app.core.database import Base
 
@@ -13,7 +13,7 @@ class Watchlist(Base):
     name: Mapped[str] = mapped_column(String(100), default="My Watchlist", nullable=False)
     
     # symbols structure: ["RELIANCE", "TCS", "INFY"]
-    symbols: Mapped[list] = mapped_column(JSONB, default=list, nullable=False)
+    symbols: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 

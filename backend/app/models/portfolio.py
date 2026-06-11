@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, DateTime, ForeignKey, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from backend.app.core.database import Base
 
@@ -13,7 +13,7 @@ class Portfolio(Base):
     name: Mapped[str] = mapped_column(String(100), default="Default Portfolio", nullable=False)
     
     # holdings structure: [{"symbol": "RELIANCE", "shares": 10, "avg_price": 2450.50}, ...]
-    holdings: Mapped[dict] = mapped_column(JSONB, default=list, nullable=False)
+    holdings: Mapped[dict] = mapped_column(JSON, default=list, nullable=False)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
